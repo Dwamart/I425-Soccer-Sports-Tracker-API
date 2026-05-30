@@ -11,4 +11,13 @@ class League extends Model
     protected $primaryKey = 'LeagueID';
 
     public $timestamps = false;
+
+    public function seasons()
+    {
+        return $this->hasMany(
+            Season::class,
+            'LeagueID',
+            'LeagueID'
+        );
+    }
 }

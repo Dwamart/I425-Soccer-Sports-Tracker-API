@@ -9,6 +9,8 @@ require __DIR__ . '/../config/database.php';
 use Slim\Factory\AppFactory;
 use App\Models\League;
 use App\Models\Team;
+use App\Models\Player;
+use App\Models\Season;
 
 $app = AppFactory::create();
 
@@ -16,56 +18,100 @@ $app->setBasePath('/I425/I425-Soccer-Sports-Tracker-API/public');
 
 $app->addRoutingMiddleware();
 
-$app->get('/api/v1/leagues', function ($request, $response) {
+$app->get('/leagues', function ($request, $response) {
+
+    $leagues = League::all();
 
     $response->getBody()->write(
-        League::all()->toJson()
+        $leagues->toJson()
     );
 
-    return $response->withHeader(
-        'Content-Type',
-        'application/json'
-    );
+    return $response
+        ->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/api/v1/leagues/{id}', function ($request, $response, $args) {
+$app->get('/leagues/{id}', function ($request, $response, $args) {
+
+    $league = League::find($args['id']);
 
     $response->getBody()->write(
-        json_encode(
-            League::find($args['id'])
-        )
+        json_encode($league)
     );
 
-    return $response->withHeader(
-        'Content-Type',
-        'application/json'
-    );
+    return $response
+        ->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/api/v1/teams', function ($request, $response) {
+$app->get('/leagues/{id}/seasons', function ($request, $response, $args) {
+
+    $league = League::find($args['id']);
 
     $response->getBody()->write(
-        Team::all()->toJson()
+        $league->seasons->toJson()
     );
 
-    return $response->withHeader(
-        'Content-Type',
-        'application/json'
-    );
+    return $response
+        ->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/api/v1/teams/{id}', function ($request, $response, $args) {
+$app->get('/teams', function ($request, $response) {
+
+    $teams = Team::all();
 
     $response->getBody()->write(
-        json_encode(
-            Team::find($args['id'])
-        )
+        $teams->toJson()
     );
 
-    return $response->withHeader(
-        'Content-Type',
-        'application/json'
+    return $response
+        ->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/teams/{id}', function ($request, $response, $args) {
+
+    $team = Team::find($args['id']);
+
+    $response->getBody()->write(
+        json_encode($team)
     );
+
+    return $response
+        ->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/players', function ($request, $response) {
+
+    $players = Player::all();
+
+    $response->getBody()->write(
+        $players->toJson()
+    );
+
+    return $response
+        ->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/players/{id}', function ($request, $response, $args) {
+
+    $player = Player::find($args['id']);
+
+    $response->getBody()->write(
+        json_encode($player)
+    );
+
+    return $response
+        ->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/players/{id}/teams', function ($request, $response, $args) {
+
+    $player = Player::find($args['id']);
+
+    $response->getBody()->write(
+        $player->teams->toJson()
+    );
+
+    return $response
+        ->withHeader('Content-Type', 'application/json');
 });
 
 $app->run();
