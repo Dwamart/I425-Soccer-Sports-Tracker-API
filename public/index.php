@@ -15,12 +15,8 @@ $app->setBasePath('/I425/I425-Soccer-Sports-Tracker-API/public');
 
 $app->addRoutingMiddleware();
 
-/*
-|--------------------------------------------------------------------------
-| GET ALL LEAGUES
-|--------------------------------------------------------------------------
-*/
-$app->get('/leagues', function ($request, $response) {
+// Get all leagues
+$app->get('/api/v1/leagues', function ($request, $response) {
 
     $leagues = League::all();
 
@@ -28,14 +24,14 @@ $app->get('/leagues', function ($request, $response) {
         $leagues->toJson()
     );
 
-    return $response
-        ->withHeader('Content-Type', 'application/json');
+    return $response->withHeader(
+        'Content-Type',
+        'application/json'
+    );
 });
 
-/*
-
-*/
-$app->get('/leagues/{id}', function ($request, $response, $args) {
+// Get a specific league
+$app->get('/api/v1/leagues/{id}', function ($request, $response, $args) {
 
     $league = League::find($args['id']);
 
@@ -43,8 +39,10 @@ $app->get('/leagues/{id}', function ($request, $response, $args) {
         json_encode($league)
     );
 
-    return $response
-        ->withHeader('Content-Type', 'application/json');
+    return $response->withHeader(
+        'Content-Type',
+        'application/json'
+    );
 });
 
 $app->run();
